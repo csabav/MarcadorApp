@@ -38,11 +38,6 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
         context = _context;
         prefs = _prefs;
         items = new ArrayList<>();
-
-        items.add(new Team((long) 134221, "Alaves", "https://www.thesportsdb.com/images/media/team/badge/vwqswq1420325494.png"));
-        items.add(new Team((long) 133727, "Ath Bilbao", "https://www.thesportsdb.com/images/media/team/badge/1gs1c31549394822.png"));
-        items.add(new Team((long) 133729, "Atlético de Madrid", "https://www.thesportsdb.com/images/media/team/badge/big56a1490135063.png"));
-        items.add(new Team((long) 133739, "Barcelona", "https://www.thesportsdb.com/images/media/team/badge/xqwpup1473502878.png"));
     }
 
     @NonNull
@@ -84,7 +79,13 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
 
     public void addItem(Team team) {
         items.add(team);
-        // notifyItemInserted(items.size() - 1);
+        notifyItemInserted(items.size() - 1);
+    }
+
+    public void update(List<Team> teams) {
+        items.clear();
+        items.addAll(teams);
+        notifyDataSetChanged();
     }
 
     public Team getItem(int position) {
