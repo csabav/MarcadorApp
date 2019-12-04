@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MarcadorApp</string>
+    <string name="title_home">Home</string>
+    <string name="title_table">Table</string>
+    <string name="title_schedule">Schedule</string>
+    <string name="title_scorers">Scorers</string>
+    <string name="title_profile">Profile</string>
+    <string name="label_profile">Select the team you support!</string>
+    <string name="button_save">Save</string>
+    <string name="preference_team_id">favorite_team_id</string>
+    <string name="message_team_saved">Team successfully saved!</string>
+    <string name="label_home">Upcoming matches</string>
+</resources>
