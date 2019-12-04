@@ -13,6 +13,12 @@ public interface TeamDao {
     @Query("SELECT * FROM Team ORDER BY name ASC")
     List<Team> getAll();
 
+    @Query("SELECT * FROM Team WHERE id = :id")
+    Team getOneById(long id);
+
+    @Query("DELETE FROM Team")
+    void clearTeams();
+
     @Insert
     long insert(Team team);
 

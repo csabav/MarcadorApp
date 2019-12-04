@@ -27,14 +27,12 @@ import java.util.List;
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder> {
     private final List<Team> items;
     private Context context;
-    private TeamSavedListener listener;
     private SharedPreferences prefs;
 
     private int lastSelectedPosition = -1;
     private RadioButton lastCheckedRadioButton = null;
 
-    public TeamAdapter(TeamSavedListener _listener, Context _context, SharedPreferences _prefs) {
-        listener = _listener;
+    public TeamAdapter(Context _context, SharedPreferences _prefs) {
         context = _context;
         prefs = _prefs;
         items = new ArrayList<>();

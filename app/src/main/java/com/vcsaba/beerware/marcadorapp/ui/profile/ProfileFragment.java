@@ -61,7 +61,7 @@ public class ProfileFragment extends Fragment implements TeamAdapter.TeamSavedLi
 
     private void initRecyclerView(View root) {
         recyclerView = root.findViewById(R.id.list_teams);
-        adapter = new TeamAdapter(this, getContext(), getActivity().getPreferences(Context.MODE_PRIVATE));
+        adapter = new TeamAdapter(getContext(), getActivity().getPreferences(Context.MODE_PRIVATE));
         new GetAllTeamsTask().execute();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);

@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase;
 
 @Database(
         entities = {Team.class},
+        exportSchema = false,
         version = 1
 )
 public abstract class MarcadorDatabase extends RoomDatabase {

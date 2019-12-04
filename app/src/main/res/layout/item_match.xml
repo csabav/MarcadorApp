@@ -12,10 +12,18 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:gravity="left"
+        android:layout_gravity="center_vertical"
         android:textSize="14sp"
         tools:text="Barcelona">
 
     </TextView>
+
+    <ImageView
+        android:id="@+id/image_team_home"
+        android:layout_width="30dp"
+        android:layout_height="30dp">
+
+    </ImageView>
 
     <TextView
         android:id="@+id/text_match_datetime"
@@ -23,17 +31,26 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
         android:textSize="11sp"
         tools:text="2019-12-07 21:00">
 
     </TextView>
+
+    <ImageView
+        android:id="@+id/image_team_away"
+        android:layout_width="30dp"
+        android:layout_height="30dp">
+
+    </ImageView>
 
     <TextView
         android:id="@+id/text_match_team_away"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
+        android:layout_gravity="center_vertical"
         android:textSize="14sp"
         tools:text="Mallorca">
 

@@ -6,8 +6,11 @@ import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vcsaba.beerware.marcadorapp.data.MarcadorDatabase;
+import com.vcsaba.beerware.marcadorapp.data.Match;
 import com.vcsaba.beerware.marcadorapp.data.Team;
+import com.vcsaba.beerware.marcadorapp.network.NetworkManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,6 +20,10 @@ import androidx.room.Room;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private MarcadorDatabase database;
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 "marcador"
         ).build();
 
-        initDatabase();
+        new InitDbTask().execute();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -57,44 +64,59 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    private void initDatabase() {
-        // ellenorizzuk, hogy inicializalva volt e mar a DB, ha nem akkor tegyuk meg
-        new AsyncTask<Void, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(Void... voids) {
-                List<Team> teams = database.teamDao().getAll();
-                return teams.size() > 0 ? false : true;
+    private class InitDbTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            database.teamDao().clearTeams();
+            List<Team> dbTeams = database.teamDao().getAll();
+            return dbTeams.size() <= 0;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isEmpty) {
+            if (isEmpty) {
+                loadTeamsData();
+            } else {
+                Log.d("MainActivity", "Database was already initialized.");
             }
+        }
+    }
 
+    private void loadTeamsData() {
+        NetworkManager.getInstance().getTeams().enqueue(new Callback<List<Team>>() {
             @Override
-            protected void onPostExecute(Boolean isEmpty) {
-                if (isEmpty) {
-                    final List<Team> items = new ArrayList<>();
-                    items.add(new Team((long) 134221, "Alaves", "https://www.thesportsdb.com/images/media/team/badge/vwqswq1420325494.png"));
-                    items.add(new Team((long) 133727, "Ath Bilbao", "https://www.thesportsdb.com/images/media/team/badge/1gs1c31549394822.png"));
-                    items.add(new Team((long) 133729, "Atlético de Madrid", "https://www.thesportsdb.com/images/media/team/badge/big56a1490135063.png"));
-                    items.add(new Team((long) 133739, "Barcelona", "https://www.thesportsdb.com/images/media/team/badge/xqwpup1473502878.png"));
-
-                    new AsyncTask<List<Team>, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(List<Team>... teams) {
-                            for (Team team : teams[0]) {
-                                database.teamDao().insert(team);
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Void voids) {
-                            Log.d("MainActivity", "Database has been successfully initialized.");
-                        }
-                    }.execute(items);
+            public void onResponse(@NonNull Call<List<Team>> call, @NonNull Response<List<Team>> response) {
+                if (response.isSuccessful()) {
+                    Log.d("MainActivity", "HTTP request was successful!");
+                    new InitializeDbTeamsTask().execute(response.body());
                 }
                 else {
-                    Log.d("MainActivity", "Database was already initialized.");
+                    Log.d("MainActivity", "HTTP request was not successful: " + response.message());
                 }
             }
-        }.execute();
+
+            @Override
+            public void onFailure(@NonNull Call<List<Team>> call, @NonNull Throwable t) {
+                t.printStackTrace();
+                Log.d("MainActivity", "Network error has occured!");
+            }
+        });
+    }
+
+
+    private class InitializeDbTeamsTask extends AsyncTask<List<Team>, Void, Void> {
+        @Override
+        protected Void doInBackground(List<Team>... teams) {
+            for (Team team : teams[0]) {
+                database.teamDao().insert(team);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void voids) {
+            Log.d("MainActivity", "Database has been successfully initialized.");
+        }
     }
 
     @Override
