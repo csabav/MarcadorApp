@@ -2,6 +2,8 @@ package com.vcsaba.beerware.marcadorapp.ui.profile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,6 +26,8 @@ import com.vcsaba.beerware.marcadorapp.adapter.TeamAdapter;
 import com.vcsaba.beerware.marcadorapp.data.MarcadorDatabase;
 import com.vcsaba.beerware.marcadorapp.data.Team;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 public class ProfileFragment extends Fragment implements TeamAdapter.TeamSavedListener {
@@ -65,6 +70,10 @@ public class ProfileFragment extends Fragment implements TeamAdapter.TeamSavedLi
         new GetAllTeamsTask().execute();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     @Override
@@ -96,6 +105,32 @@ public class ProfileFragment extends Fragment implements TeamAdapter.TeamSavedLi
         @Override
         protected void onPostExecute(List<Team> teams) {
             adapter.update(teams);
+        }
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+
+        public DownloadImageTask(ImageView _imageView) {
+            this.imageView = _imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String url = urls[0];
+            Bitmap logo = null;
+            try {
+                InputStream in = new URL(url).openStream();
+                logo = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
         }
     }
 

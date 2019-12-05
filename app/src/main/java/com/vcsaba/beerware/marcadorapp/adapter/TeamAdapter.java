@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +32,15 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
 
     private int lastSelectedPosition = -1;
     private RadioButton lastCheckedRadioButton = null;
+    private long selectedTeamId;
 
     public TeamAdapter(Context _context, SharedPreferences _prefs) {
         context = _context;
         prefs = _prefs;
         items = new ArrayList<>();
+
+        Resources resources = context.getResources();
+        selectedTeamId = prefs.getLong(resources.getString(R.string.preference_team_id), -1L);
     }
 
     @NonNull
@@ -47,21 +52,35 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TeamViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TeamViewHolder holder, final int position) {
         Team team = items.get(position);
         holder.textView.setText(team.name);
+        holder.radioButton.setChecked(false);
         new DownloadImageTask(holder.imageView).execute(team.badgeURL);
 
-        Resources resources = context.getResources();
-        long id = prefs.getLong(resources.getString(R.string.preference_team_id), -1);
-        if (team.id == id) {
-            lastSelectedPosition = position;
-            if (lastCheckedRadioButton != null) {
-                lastCheckedRadioButton.setChecked(false);
+        if (lastSelectedPosition > -1 && lastCheckedRadioButton != null) {
+            if (position == lastSelectedPosition) {
+                holder.radioButton.setChecked(true);
             }
-            holder.radioButton.setChecked(true);
+        } else if (team.id == selectedTeamId) {
+            lastSelectedPosition = position;
             lastCheckedRadioButton = holder.radioButton;
+            holder.radioButton.setChecked(true);
         }
+
+        holder.radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton radioButton = (RadioButton) v;
+
+                lastSelectedPosition = position;
+                if (lastCheckedRadioButton != null) {
+                    lastCheckedRadioButton.setChecked(false);
+                }
+                radioButton.setChecked(true);
+                lastCheckedRadioButton = radioButton;
+            }
+        });
 
         holder.team = team;
     }
@@ -106,18 +125,6 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
             radioButton = itemView.findViewById(R.id.radio_team);
             imageView = itemView.findViewById(R.id.image_team);
             textView = itemView.findViewById(R.id.text_team_name);
-
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    lastSelectedPosition = getAdapterPosition();
-                    if (lastCheckedRadioButton != null && lastCheckedRadioButton != radioButton) {
-                        lastCheckedRadioButton.setChecked(false);
-                    }
-                    lastCheckedRadioButton = radioButton;
-                    // notifyDataSetChanged();
-                }
-            });
         }
     }
 

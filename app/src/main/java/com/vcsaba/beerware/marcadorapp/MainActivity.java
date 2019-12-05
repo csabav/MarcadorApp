@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private class InitDbTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... voids) {
-            database.teamDao().clearTeams();
+            // database.teamDao().clearTeams();
             List<Team> dbTeams = database.teamDao().getAll();
             return dbTeams.size() <= 0;
         }
