@@ -10,4 +10,56 @@
     <string name="preference_team_id">favorite_team_id</string>
     <string name="message_team_saved">Team successfully saved!</string>
     <string name="label_home">Upcoming matches</string>
+    <string name="label_schedule">Schedule</string>
+    <string name="table_header_number">#</string>
+    <string name="table_header_team">Name</string>
+    <string name="table_header_played">P</string>
+    <string name="table_header_wins">W</string>
+    <string name="table_header_draws">D</string>
+    <string name="table_header_losses">L</string>
+    <string name="table_header_goalsfor">GF</string>
+    <string name="table_header_goalsagainst">GA</string>
+    <string name="table_header_goalsdifference">GD</string>
+    <string name="table_header_points">Pts</string>
+
+    <string-array name="array_schedule">
+        <item>Gameday 1</item>
+        <item>Gameday 2</item>
+        <item>Gameday 3</item>
+        <item>Gameday 4</item>
+        <item>Gameday 5</item>
+        <item>Gameday 6</item>
+        <item>Gameday 7</item>
+        <item>Gameday 8</item>
+        <item>Gameday 9</item>
+        <item>Gameday 10</item>
+        <item>Gameday 11</item>
+        <item>Gameday 12</item>
+        <item>Gameday 13</item>
+        <item>Gameday 14</item>
+        <item>Gameday 15</item>
+        <item>Gameday 16</item>
+        <item>Gameday 17</item>
+        <item>Gameday 18</item>
+        <item>Gameday 19</item>
+        <item>Gameday 20</item>
+        <item>Gameday 21</item>
+        <item>Gameday 22</item>
+        <item>Gameday 23</item>
+        <item>Gameday 24</item>
+        <item>Gameday 25</item>
+        <item>Gameday 26</item>
+        <item>Gameday 27</item>
+        <item>Gameday 28</item>
+        <item>Gameday 29</item>
+        <item>Gameday 30</item>
+        <item>Gameday 31</item>
+        <item>Gameday 32</item>
+        <item>Gameday 33</item>
+        <item>Gameday 34</item>
+        <item>Gameday 35</item>
+        <item>Gameday 36</item>
+        <item>Gameday 37</item>
+        <item>Gameday 38</item>
+    </string-array>
 </resources>

@@ -1,17 +1,12 @@
 package com.vcsaba.beerware.marcadorapp.network;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.vcsaba.beerware.marcadorapp.data.Match;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -19,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class UpcomingMatchesApiInterceptor implements Interceptor {
+public class MatchesApiInterceptor implements Interceptor {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Override
@@ -36,10 +31,17 @@ public class UpcomingMatchesApiInterceptor implements Interceptor {
             JsonObject event = events.get(i).getAsJsonObject();
             JsonObject match = new JsonObject();
 
-            match.addProperty("idHomeTeam", event.get("idHomeTeam").getAsLong());
-            match.addProperty("idAwayTeam", event.get("idAwayTeam").getAsLong());
-            match.addProperty("dateEvent", event.get("dateEvent").getAsString());
-            match.addProperty("strTimeLocal", event.get("strTimeLocal").getAsString());
+            match.addProperty("homeTeamId", event.get("idHomeTeam").getAsLong());
+            match.addProperty("awayTeamId", event.get("idAwayTeam").getAsLong());
+            match.addProperty("date", event.get("dateEvent").getAsString());
+            match.addProperty("time", event.get("strTimeLocal").getAsString());
+
+            JsonElement homeTeamScore = event.get("intHomeScore");
+            JsonElement awayTeamScore = event.get("intAwayScore");
+            if (homeTeamScore != JsonNull.INSTANCE && awayTeamScore != JsonNull.INSTANCE) {
+                match.addProperty("homeTeamScore", homeTeamScore.getAsInt());
+                match.addProperty("awayTeamScore", awayTeamScore.getAsInt());
+            }
 
             matches.add(match);
         }

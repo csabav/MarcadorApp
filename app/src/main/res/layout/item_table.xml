@@ -1,0 +1,115 @@
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/table_item_number"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="0"
+        android:layout_weight="0.8"
+        android:gravity="center"
+        tools:text="1" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_column="1"
+        android:layout_weight="6"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/table_item_image_team"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/table_item_team"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            tools:text="Barcelona" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/table_item_played"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="2"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        tools:text="14" />
+
+    <TextView
+        android:id="@+id/table_item_wins"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="3"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        tools:text="12" />
+
+    <TextView
+        android:id="@+id/table_item_draws"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="4"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/table_item_losses"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="5"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        tools:text="2" />
+
+    <TextView
+        android:id="@+id/table_item_goalsfor"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="6"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        tools:text="45" />
+
+    <TextView
+        android:id="@+id/table_item_goalsagainst"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="7"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        tools:text="25" />
+
+    <TextView
+        android:id="@+id/table_item_goalsdifference"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="8"
+        android:layout_weight="1.2"
+        android:gravity="end|center_vertical"
+        tools:text="+20" />
+
+    <TextView
+        android:id="@+id/table_item_points"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_column="9"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        tools:text="37" />
+
+</TableRow>

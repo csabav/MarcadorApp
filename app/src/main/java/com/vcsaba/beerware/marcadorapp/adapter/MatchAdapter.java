@@ -30,10 +30,12 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
     private List<Match> items = new ArrayList<>();
     private Context context;
     private SharedPreferences prefs;
+    private MarcadorDatabase database;
 
-    public MatchAdapter(Context _context, SharedPreferences _prefs) {
+    public MatchAdapter(Context _context, SharedPreferences _prefs, MarcadorDatabase _database) {
         context = _context;
         prefs = _prefs;
+        database = _database;
     }
 
     @NonNull
@@ -46,22 +48,8 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MatchViewHolder holder, int position) {
-        Match match = items.get(position);
-        /*holder.homeTextView.setText(match.homeTeam.name);
-        holder.awayTextView.setText(match.awayTeam.name);
-        holder.dateTextView.setText(match.date + " " + match.time);
-        new DownloadImageTask(holder.homeImageView).execute(match.homeTeam.badgeURL);
-        new DownloadImageTask(holder.awayImageView).execute(match.awayTeam.badgeURL);
-
-        Resources resources = context.getResources();
-        long id = prefs.getLong(resources.getString(R.string.preference_team_id), -1);
-        if (match.homeTeam.id == id) {
-            holder.homeTextView.setTypeface(null, Typeface.BOLD);
-        } else if (match.awayTeam.id == id) {
-            holder.awayTextView.setTypeface(null, Typeface.BOLD);
-        }*/
-
-        holder.match = match;
+        holder.match = items.get(position);
+        new SetMatchDetailsTask(holder).execute();
     }
 
     @Override
@@ -77,7 +65,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
 
     class MatchViewHolder extends RecyclerView.ViewHolder {
         TextView homeTextView;
-        TextView dateTextView;
+        TextView dateScoreTextView;
         TextView awayTextView;
         ImageView homeImageView;
         ImageView awayImageView;
@@ -86,10 +74,54 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
         MatchViewHolder(@NonNull View itemView) {
             super(itemView);
             homeTextView = itemView.findViewById(R.id.text_match_team_home);
-            dateTextView = itemView.findViewById(R.id.text_match_datetime);
+            dateScoreTextView = itemView.findViewById(R.id.text_match_datetime_score);
             awayTextView = itemView.findViewById(R.id.text_match_team_away);
             homeImageView = itemView.findViewById(R.id.image_team_home);
             awayImageView = itemView.findViewById(R.id.image_team_away);
+        }
+    }
+
+    private class SetMatchDetailsTask extends AsyncTask<Void, Void, List<Team>> {
+        MatchViewHolder holder;
+
+        public SetMatchDetailsTask(MatchViewHolder _holder) {
+            holder = _holder;
+        }
+
+        @Override
+        protected List<Team> doInBackground(Void... voids) {
+            List<Team> teams = new ArrayList<>();
+            teams.add(database.teamDao().getOneById(holder.match.homeTeamId));
+            teams.add(database.teamDao().getOneById(holder.match.awayTeamId));
+            return teams;
+        }
+
+        @Override
+        protected void onPostExecute(List<Team> teams) {
+            Team homeTeam = teams.get(0);
+            Team awayTeam = teams.get(1);
+
+            holder.homeTextView.setText(homeTeam.name);
+            holder.awayTextView.setText(awayTeam.name);
+
+            String dateScoreText;
+            if(holder.match.homeTeamScore != null || holder.match.awayTeamScore != null) {
+                dateScoreText = holder.match.homeTeamScore + " - " + holder.match.awayTeamScore;
+            } else {
+                dateScoreText = holder.match.date.substring(5) + " " + holder.match.time.substring(0, 5);
+            }
+            holder.dateScoreTextView.setText(dateScoreText);
+
+            new DownloadImageTask(holder.homeImageView).execute(homeTeam.badgeURL);
+            new DownloadImageTask(holder.awayImageView).execute(awayTeam.badgeURL);
+
+            Resources resources = context.getResources();
+            long id = prefs.getLong(resources.getString(R.string.preference_team_id), 0);
+            if (homeTeam.id == id) {
+                holder.homeTextView.setTypeface(null, Typeface.BOLD);
+            } else if (awayTeam.id == id) {
+                holder.awayTextView.setTypeface(null, Typeface.BOLD);
+            }
         }
     }
 

@@ -54,10 +54,14 @@ public class HomeFragment extends Fragment {
 
     private void initRecyclerView(View root) {
         recyclerView = root.findViewById(R.id.list_upcoming_matches);
-        adapter = new MatchAdapter(getContext(), getActivity().getPreferences(Context.MODE_PRIVATE));
+        adapter = new MatchAdapter(getContext(), getActivity().getPreferences(Context.MODE_PRIVATE), database);
         loadUpcomingMatchesData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     private void loadUpcomingMatchesData() {
@@ -65,7 +69,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<Match>> call, @NonNull Response<List<Match>> response) {
                 if (response.isSuccessful()) {
-                    adapter.update(response.body());
+                    List<Match> matches = response.body();
+                    // TODO matches.sort();
+                    adapter.update(matches.subList(0, 10));
                     Log.d("HomeFragment", "HTTP request was successful!");
                 }
                 else {
@@ -79,5 +85,11 @@ public class HomeFragment extends Fragment {
                 Log.d("HomeFragment", "Network error has occured!");
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        database.close();
     }
 }

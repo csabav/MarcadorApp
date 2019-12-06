@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vcsaba.beerware.marcadorapp.data.MarcadorDatabase;
-import com.vcsaba.beerware.marcadorapp.data.Match;
 import com.vcsaba.beerware.marcadorapp.data.Team;
 import com.vcsaba.beerware.marcadorapp.network.NetworkManager;
 
@@ -18,7 +17,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<Team>> call, @NonNull Response<List<Team>> response) {
                 if (response.isSuccessful()) {
                     Log.d("MainActivity", "HTTP request was successful!");
-                    new InitializeDbTeamsTask().execute(response.body());
+                    new InsertTeamsToDbTask().execute(response.body());
                 }
                 else {
                     Log.d("MainActivity", "HTTP request was not successful: " + response.message());
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class InitializeDbTeamsTask extends AsyncTask<List<Team>, Void, Void> {
+    private class InsertTeamsToDbTask extends AsyncTask<List<Team>, Void, Void> {
         @Override
         protected Void doInBackground(List<Team>... teams) {
             for (Team team : teams[0]) {

@@ -1,19 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="8dp">
 
-    <TextView
-        android:id="@+id/text_table"
+    <TableLayout
+        android:id="@+id/table"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="0"
+                android:layout_weight="0.8"
+                android:gravity="center_horizontal"
+                android:text="@string/table_header_number" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="1"
+                android:layout_weight="6"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/table_header_team" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/table_header_played" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="3"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/table_header_wins" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="4"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/table_header_draws" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="5"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/table_header_losses" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="6"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/table_header_goalsfor" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="7"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/table_header_goalsagainst" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="8"
+                android:layout_weight="1.2"
+                android:gravity="end"
+                android:text="@string/table_header_goalsdifference" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="9"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/table_header_points" />
+
+        </TableRow>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </TableLayout>
+
+</LinearLayout>
